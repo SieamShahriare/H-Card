@@ -1,0 +1,6 @@
+{
+  "name": "My Health Card",
+  "description": "A centralized digital health record and appointment management system for citizens.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

@@ -1,0 +1,96 @@
+import React from 'react';
+import { 
+  Settings, 
+  Shield, 
+  Bell, 
+  HelpCircle, 
+  LogOut, 
+  ChevronRight,
+  User as UserIcon,
+  QrCode,
+  Edit3
+} from 'lucide-react';
+import { User } from '../types';
+
+interface ProfileProps {
+  user: User;
+}
+
+export default function Profile({ user }: ProfileProps) {
+  return (
+    <div className="space-y-10 pb-8">
+      {/* Profile Header */}
+      <header className="flex flex-col items-center text-center">
+        <div className="relative mb-6">
+          <div className="w-32 h-32 rounded-full border-4 border-emerald-100 p-1 shadow-xl">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcUWmwSNfSdYVnRKIKWHs7mPoVbf8Serdlgbt9KZqsaAjq7oKkzvhYdUem6gbDuAiCSNu7Y_0eRVHK6puNiD-b8MJ7Y105bep10XPnCEDYUyNC-1ZyPC4Mb6vKnB8Hbait83wClVJ0SJQHntwM0BpLI-b-Kwy9FDDTxFNUT41FX9KUgi-j_pmGqPTIFKFVqtjspsXAzbdGfY6x4yJFYqUvdEBlTo3f2js2outnfXRTQMW4N4QwzI6DvXF3rNkLT0l5WK-5d8FzQSye" 
+              alt="Profile" 
+              className="w-full h-full rounded-full object-cover"
+            />
+          </div>
+          <button className="absolute bottom-1 right-1 w-10 h-10 bg-primary text-white rounded-full border-4 border-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform">
+            <Edit3 size={18} />
+          </button>
+        </div>
+        <h2 className="text-3xl font-extrabold text-on-background tracking-tighter">{user.name}</h2>
+        <p className="text-on-surface-variant font-medium mt-1">Health ID: {user.id}</p>
+        
+        <div className="flex gap-3 mt-6">
+          <button className="px-6 py-2.5 bg-primary text-white rounded-full font-bold text-xs flex items-center gap-2 shadow-md active:scale-95 transition-transform">
+            <QrCode size={16} /> My QR Code
+          </button>
+          <button className="px-6 py-2.5 bg-surface-container-high text-primary rounded-full font-bold text-xs active:scale-95 transition-transform">
+            Edit Profile
+          </button>
+        </div>
+      </header>
+
+      {/* Info Cards Bento */}
+      <section className="grid grid-cols-2 gap-4">
+        <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 shadow-sm">
+          <p className="text-[9px] font-bold text-outline uppercase tracking-widest mb-1">Blood Group</p>
+          <p className="text-2xl font-extrabold text-primary">{user.bloodGroup}</p>
+        </div>
+        <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 shadow-sm">
+          <p className="text-[9px] font-bold text-outline uppercase tracking-widest mb-1">Age</p>
+          <p className="text-2xl font-extrabold text-primary">{user.age} Yrs</p>
+        </div>
+      </section>
+
+      {/* Settings List */}
+      <section className="space-y-2">
+        <h3 className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.15em] mb-4 px-2">Account Settings</h3>
+        <div className="bg-surface-container-low rounded-[2rem] overflow-hidden border border-outline-variant/10">
+          <SettingItem icon={<UserIcon size={20} />} label="Personal Information" />
+          <SettingItem icon={<Shield size={20} />} label="Security & Privacy" />
+          <SettingItem icon={<Bell size={20} />} label="Notifications" />
+          <SettingItem icon={<Settings size={20} />} label="App Preferences" />
+          <SettingItem icon={<HelpCircle size={20} />} label="Help & Support" />
+        </div>
+      </section>
+
+      {/* Logout */}
+      <section className="px-2">
+        <button className="w-full py-5 flex items-center justify-center gap-3 text-red-600 font-bold text-base hover:bg-red-50 rounded-2xl transition-colors active:scale-95">
+          <LogOut size={22} /> Log Out
+        </button>
+        <p className="text-center text-[10px] text-outline font-medium mt-6 uppercase tracking-widest">Version 2.4.1 (Build 882)</p>
+      </section>
+    </div>
+  );
+}
+
+function SettingItem({ icon, label }: { icon: React.ReactNode, label: string }) {
+  return (
+    <button className="w-full px-6 py-5 flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+      <div className="flex items-center gap-4">
+        <div className="text-outline group-hover:text-primary transition-colors">
+          {icon}
+        </div>
+        <span className="text-sm font-bold text-on-surface">{label}</span>
+      </div>
+      <ChevronRight size={18} className="text-outline group-hover:text-primary transition-colors" />
+    </button>
+  );
+}
