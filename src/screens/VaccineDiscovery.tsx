@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, Info, ShieldAlert, Thermometer, Syringe, ShieldCheck } from 'lucide-react';
 import { Screen } from '../types';
+import { DISCOVERY_VACCINES } from '../data';
 
 interface VaccineDiscoveryProps {
-  setScreen: (screen: Screen) => void;
+  setScreen: (screen: Screen, params?: { vaccineId?: string }) => void;
 }
 
 export default function VaccineDiscovery({ setScreen }: VaccineDiscoveryProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All Vaccines');
+
+  const categories = ['All Vaccines', 'Seasonal', 'Travel', 'Pediatric'];
+
+  const filteredVaccines = DISCOVERY_VACCINES.filter(v => {
+    const matchesSearch = v.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         v.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = activeCategory === 'All Vaccines' || v.category === activeCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const getIcon = (id: string) => {
+    switch (id) {
+      case 'dv1': return <ShieldAlert size={28} />;
+      case 'dv2': return <Thermometer size={28} />;
+      case 'dv3': return <Syringe size={28} />;
+      case 'dv4': return <ShieldCheck size={28} />;
+      case 'dv5': return <ShieldCheck size={28} />;
+      case 'dv6': return <Syringe size={28} />;
+      default: return <Syringe size={28} />;
+    }
+  };
+
   return (
     <div className="space-y-8 pb-8">
       {/* Hero Search Section */}
@@ -23,6 +48,8 @@ export default function VaccineDiscovery({ setScreen }: VaccineDiscoveryProps) {
           <input 
             type="text" 
             placeholder="Search for vaccines..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-surface-container-high border-none h-14 pl-12 pr-24 rounded-3xl text-sm focus:ring-2 focus:ring-secondary/20 focus:bg-surface-container-lowest transition-all shadow-sm"
           />
           <div className="absolute inset-y-0 right-2 flex items-center">
@@ -33,54 +60,44 @@ export default function VaccineDiscovery({ setScreen }: VaccineDiscoveryProps) {
 
       {/* Category Pills */}
       <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-        <button className="whitespace-nowrap px-5 py-2 rounded-full bg-primary text-white font-medium text-xs">All Vaccines</button>
-        <button className="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-medium text-xs hover:bg-surface-container-high transition-colors">Seasonal</button>
-        <button className="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-medium text-xs hover:bg-surface-container-high transition-colors">Travel</button>
-        <button className="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-medium text-xs hover:bg-surface-container-high transition-colors">Pediatric</button>
+        {categories.map(cat => (
+          <button 
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`whitespace-nowrap px-5 py-2 rounded-full font-medium text-xs transition-colors ${
+              activeCategory === cat 
+                ? 'bg-primary text-white' 
+                : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
       {/* Vaccine Cards Grid */}
       <div className="space-y-4">
-        <DiscoveryCard 
-          icon={<ShieldAlert size={28} />}
-          title="COVID-19 Booster"
-          description="Updated monovalent vaccine targeting current variants. recommended for adults 65+ and immunocompromised individuals."
-          tag="Highly Recommended"
-          tagColor="bg-emerald-100 text-emerald-900"
-          metaLabel="Availability"
-          metaValue="Immediate"
-          metaValueColor="text-emerald-700"
-          onSelect={() => setScreen('hospitals')}
-        />
-        <DiscoveryCard 
-          icon={<Thermometer size={28} />}
-          title="Influenza (Flu)"
-          description="Annual quadrivalent flu shot. Best taken during the autumn months for maximum protection through winter."
-          tag="Seasonal"
-          tagColor="bg-blue-100 text-blue-900"
-          metaLabel="Availability"
-          metaValue="In Stock"
-          metaValueColor="text-emerald-700"
-          onSelect={() => setScreen('hospitals')}
-        />
-        <DiscoveryCard 
-          icon={<Syringe size={28} />}
-          title="Hepatitis B"
-          description="Protect against liver infection. Required for healthcare workers and recommended for all infants at birth."
-          metaLabel="Doses Needed"
-          metaValue="3 Dose Series"
-          metaValueColor="text-on-surface"
-          onSelect={() => setScreen('hospitals')}
-        />
-        <DiscoveryCard 
-          icon={<ShieldCheck size={28} />}
-          title="HPV"
-          description="Human Papillomavirus vaccine. Prevents infections that can lead to certain types of cancer later in life."
-          metaLabel="Eligibility"
-          metaValue="Ages 9-26"
-          metaValueColor="text-on-surface"
-          onSelect={() => setScreen('hospitals')}
-        />
+        {filteredVaccines.length > 0 ? (
+          filteredVaccines.map(v => (
+            <DiscoveryCard 
+              key={v.id}
+              icon={getIcon(v.id)}
+              title={v.title}
+              description={v.description}
+              tag={v.tag}
+              tagColor={v.tagColor}
+              metaLabel={v.metaLabel}
+              metaValue={v.metaValue}
+              metaValueColor={v.metaValueColor}
+              onSelect={() => setScreen('hospitals')}
+              onDetails={() => setScreen('vaccine-details', { vaccineId: v.id })}
+            />
+          ))
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-on-surface-variant italic">No vaccines found matching your criteria.</p>
+          </div>
+        )}
       </div>
 
       {/* Informational Banner */}
@@ -100,7 +117,7 @@ export default function VaccineDiscovery({ setScreen }: VaccineDiscoveryProps) {
   );
 }
 
-function DiscoveryCard({ icon, title, description, tag, tagColor, metaLabel, metaValue, metaValueColor, onSelect }: any) {
+function DiscoveryCard({ icon, title, description, tag, tagColor, metaLabel, metaValue, metaValueColor, onSelect, onDetails }: any) {
   return (
     <div className="bg-surface-container-lowest p-5 rounded-3xl shadow-sm border border-outline-variant/10 flex flex-col justify-between group hover:shadow-md transition-shadow">
       <div className="flex justify-between items-start mb-4">
@@ -123,7 +140,7 @@ function DiscoveryCard({ icon, title, description, tag, tagColor, metaLabel, met
           <span className={`text-sm font-medium ${metaValueColor}`}>{metaValue}</span>
         </div>
         <div className="flex gap-2">
-          <button className="bg-surface-container-high text-primary px-4 py-2 rounded-xl font-semibold text-xs active:scale-95 transition-all">Details</button>
+          <button onClick={onDetails} className="bg-surface-container-high text-primary px-4 py-2 rounded-xl font-semibold text-xs active:scale-95 transition-all">Details</button>
           <button onClick={onSelect} className="bg-primary text-white px-5 py-2 rounded-xl font-semibold text-xs active:scale-95 transition-all shadow-md shadow-primary/10">Select</button>
         </div>
       </div>

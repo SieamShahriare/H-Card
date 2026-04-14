@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Pill, 
   History, 
   Stethoscope, 
-  Hospital,
-  Info
+  Hospital as HospitalIcon
 } from 'lucide-react';
+import { MEDICATIONS, HOSPITALS, DOCTORS } from '../data';
 
 export default function Prescriptions() {
+  const [activeTab, setActiveTab] = useState<'active' | 'past'>('active');
+  
+  const activeMeds = MEDICATIONS.filter(m => m.status === 'active');
+  const completedMeds = MEDICATIONS.filter(m => m.status === 'completed');
+
+  const getHospitalName = (id: string) => HOSPITALS.find(h => h.id === id)?.name || 'Health Center';
+  const getDoctorName = (id: string) => DOCTORS.find(d => d.id === id)?.name || 'Doctor';
+
   return (
-    <div className="space-y-10 pb-8">
+    <div className="space-y-8 pb-8">
       {/* Header Section */}
       <header>
         <div className="flex items-center gap-2 mb-2">
@@ -21,61 +29,70 @@ export default function Prescriptions() {
         </p>
       </header>
 
-      {/* Active Medications Section */}
-      <section>
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <div className="h-8 w-1 bg-secondary rounded-full"></div>
-            <h3 className="text-2xl font-bold text-on-background tracking-tight">Active Medications</h3>
-          </div>
-          <span className="bg-secondary/10 text-secondary px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">2 Active</span>
-        </div>
+      {/* Tabs */}
+      <div className="bg-surface-container-high rounded-full p-1.5 flex shadow-inner">
+        <button 
+          onClick={() => setActiveTab('active')}
+          className={`flex-1 py-3 px-4 rounded-full text-xs font-bold tracking-wide transition-all duration-300 ${
+            activeTab === 'active' 
+              ? 'bg-primary text-white shadow-md' 
+              : 'text-on-surface-variant hover:text-primary'
+          }`}
+        >
+          ACTIVE ({activeMeds.length})
+        </button>
+        <button 
+          onClick={() => setActiveTab('past')}
+          className={`flex-1 py-3 px-4 rounded-full text-xs font-bold tracking-wide transition-all duration-300 ${
+            activeTab === 'past' 
+              ? 'bg-primary text-white shadow-md' 
+              : 'text-on-surface-variant hover:text-primary'
+          }`}
+        >
+          PAST ({completedMeds.length})
+        </button>
+      </div>
 
-        <div className="space-y-6">
-          <ActiveMedCard 
-            name="Napa Extend"
-            purpose="Pain & Fever Management"
-            dosage="500 mg"
-            frequency="Twice Daily"
-            duration="10 Days"
-            remaining="4 Days"
-            doctor="Dr. Sarah Jenkins"
-            hospital="St. Jude Metropolitan"
-          />
-          <ActiveMedCard 
-            name="Seclo 20mg"
-            purpose="Gastric Acid Control"
-            dosage="10 mg"
-            frequency="Once Daily (Morning)"
-            duration="Long-term"
-            refill="In 15 Days"
-            doctor="Dr. Marcus Chen"
-            hospital="General Health Center"
-          />
-        </div>
-      </section>
-
-      {/* Completed Medications Section */}
-      <section>
-        <div className="flex items-center gap-4 mb-8">
-          <div className="h-8 w-1 bg-outline-variant rounded-full"></div>
-          <h3 className="text-2xl font-bold text-on-background tracking-tight">Completed</h3>
-        </div>
-
-        <div className="space-y-4">
-          <CompletedMedItem 
-            name="Ibuprofen 400mg"
-            date="Completed March 12, 2024"
-            hospital="City Urgent Care"
-            doctor="Dr. Lisa Roy"
-          />
-          <CompletedMedItem 
-            name="Vitamin D3 Supplement"
-            date="Completed Jan 05, 2024"
-            hospital="Dhaka Medical"
-            doctor="Dr. Shahnaz Kabir"
-          />
-        </div>
+      {/* Medications List */}
+      <section className="space-y-6">
+        {activeTab === 'active' ? (
+          activeMeds.length > 0 ? (
+            activeMeds.map(m => (
+              <ActiveMedCard 
+                key={m.id}
+                name={m.name}
+                purpose={m.purpose}
+                dosage={m.dosage}
+                frequency={m.frequency}
+                duration={m.duration}
+                remaining={m.remaining}
+                refill={m.refill}
+                doctor={getDoctorName(m.doctorId)}
+                hospital={getHospitalName(m.hospitalId)}
+              />
+            ))
+          ) : (
+            <div className="text-center py-12 bg-surface-container-lowest rounded-3xl border border-dashed border-outline-variant">
+              <p className="text-on-surface-variant italic">No active medications found.</p>
+            </div>
+          )
+        ) : (
+          completedMeds.length > 0 ? (
+            completedMeds.map(m => (
+              <CompletedMedItem 
+                key={m.id}
+                name={m.name}
+                date={m.endDate || 'Completed Recently'}
+                hospital={getHospitalName(m.hospitalId)}
+                doctor={getDoctorName(m.doctorId)}
+              />
+            ))
+          ) : (
+            <div className="text-center py-12 bg-surface-container-lowest rounded-3xl border border-dashed border-outline-variant">
+              <p className="text-on-surface-variant italic">No medication history found.</p>
+            </div>
+          )
+        )}
       </section>
 
       {/* Informational Card */}
@@ -126,7 +143,7 @@ function ActiveMedCard({ name, purpose, dosage, frequency, duration, remaining, 
           <span className="text-xs text-on-surface-variant font-medium">{doctor}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Hospital size={14} className="text-outline" />
+          <HospitalIcon size={14} className="text-outline" />
           <span className="text-xs font-bold text-secondary">{hospital}</span>
         </div>
       </div>
@@ -145,10 +162,10 @@ function MedStat({ label, value }: { label: string, value: string }) {
 
 function CompletedMedItem({ name, date, hospital, doctor }: any) {
   return (
-    <div className="bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/15 flex flex-col gap-4">
+    <div className="bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/15 flex flex-col gap-4 shadow-sm group hover:shadow-md transition-all">
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center shrink-0">
-          <History size={24} className="text-outline" />
+        <div className="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center shrink-0 text-outline group-hover:text-primary transition-colors">
+          <History size={24} />
         </div>
         <div>
           <h4 className="font-bold text-on-surface text-base">{name}</h4>

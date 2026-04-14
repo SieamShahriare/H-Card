@@ -6,17 +6,22 @@ import {
   Pill, 
   Shield, 
   Microscope,
-  Verified,
-  Info
+  Verified
 } from 'lucide-react';
 import { Screen } from '../types';
+import { VACCINES, HOSPITALS } from '../data';
 
 interface VaccinesProps {
-  setScreen: (screen: Screen) => void;
+  setScreen: (screen: Screen, params?: { vaccineId?: string }) => void;
 }
 
 export default function Vaccines({ setScreen }: VaccinesProps) {
   const [tab, setTab] = useState<'past' | 'pending'>('past');
+
+  const getHospitalName = (id: string) => HOSPITALS.find(h => h.id === id)?.name || 'Vaccine Center';
+
+  const pastVaccines = VACCINES.filter(v => v.status === 'Completed');
+  const pendingVaccines = VACCINES.filter(v => v.status === 'Pending');
 
   return (
     <div className="space-y-8">
@@ -54,54 +59,31 @@ export default function Vaccines({ setScreen }: VaccinesProps) {
 
       {tab === 'past' ? (
         <div className="space-y-6">
-          <VaccineCard 
-            icon={<Syringe size={24} />}
-            title="BCG (Tuberculosis)"
-            date="15 March 2024"
-            hospital="Dhaka Medical College Hospital"
-            status="Completed"
-            onClick={() => setScreen('vaccine-details')}
-          />
-          <VaccineCard 
-            icon={<Pill size={24} />}
-            title="OPV (Polio) - Dose 3"
-            date="02 January 2024"
-            hospital="Bangabandhu Sheikh Mujib Medical University"
-            status="Completed"
-            onClick={() => setScreen('vaccine-details')}
-          />
-          <VaccineCard 
-            icon={<Shield size={24} />}
-            title="Hepatitis B"
-            date="12 November 2023"
-            hospital="Apollo Hospitals Dhaka"
-            status="Completed"
-            onClick={() => setScreen('vaccine-details')}
-          />
-          <VaccineCard 
-            icon={<Microscope size={24} />}
-            title="TT (Tetanus Toxoid)"
-            date="28 August 2023"
-            hospital="Suhrawardy Medical College Hospital"
-            status="Completed"
-            onClick={() => setScreen('vaccine-details')}
-          />
+          {pastVaccines.map(v => (
+            <VaccineCard 
+              key={v.id}
+              icon={<Syringe size={24} />}
+              title={v.title}
+              date={v.date || ''}
+              hospital={getHospitalName(v.hospitalId)}
+              status="Completed"
+              onClick={() => setScreen('vaccine-details', { vaccineId: v.id })}
+            />
+          ))}
         </div>
       ) : (
         <div className="space-y-6">
-          <PendingVaccineCard 
-            title="Hepatitis B (Dose 2)"
-            dueDate="October 24, 2023"
-            hospital="St. Jude Medical Center"
-            urgent={true}
-            onClick={() => setScreen('vaccine-discovery')}
-          />
-          <PendingVaccineCard 
-            title="Influenza (Quadrivalent)"
-            dueDate="November 12, 2023"
-            hospital="City Health Clinic"
-            onClick={() => setScreen('vaccine-discovery')}
-          />
+          {pendingVaccines.map(v => (
+            <PendingVaccineCard 
+              key={v.id}
+              title={v.title}
+              dueDate={v.dueDate || ''}
+              hospital={getHospitalName(v.hospitalId)}
+              urgent={v.urgent}
+              onBook={() => setScreen('vaccine-discovery')}
+              onDetails={() => setScreen('vaccine-details', { vaccineId: v.id })}
+            />
+          ))}
         </div>
       )}
 
@@ -113,26 +95,6 @@ export default function Vaccines({ setScreen }: VaccinesProps) {
             <h4 className="text-xl font-bold mb-2">Digital Verification</h4>
             <p className="text-emerald-100/80 text-xs leading-relaxed">
               All records listed here are synchronized with the National Health Database of Bangladesh.
-            </p>
-          </div>
-        </div>
-        
-        <div className="bg-secondary-container p-8 rounded-[2rem] text-primary flex flex-col justify-between min-h-[180px] shadow-lg">
-          <div className="flex -space-x-2">
-            {[1, 2].map(i => (
-              <div key={i} className="w-10 h-10 rounded-full border-2 border-white overflow-hidden">
-                <img 
-                  src={`https://i.pravatar.cc/100?img=${i + 10}`} 
-                  alt="Doctor" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
-          <div>
-            <h4 className="text-xl font-bold mb-2">Need Assistance?</h4>
-            <p className="text-primary/70 text-xs leading-relaxed">
-              Contact your hospital if you find any discrepancy in your vaccine records.
             </p>
           </div>
         </div>
@@ -175,7 +137,7 @@ function VaccineCard({ icon, title, date, hospital, status, onClick }: any) {
   );
 }
 
-function PendingVaccineCard({ title, dueDate, hospital, urgent, onClick }: any) {
+function PendingVaccineCard({ title, dueDate, hospital, urgent, onBook, onDetails }: any) {
   return (
     <div className="bg-surface-container-lowest rounded-3xl p-6 shadow-sm ring-1 ring-outline-variant/15 flex flex-col gap-6 group">
       <div className="flex justify-between items-start">
@@ -208,12 +170,15 @@ function PendingVaccineCard({ title, dueDate, hospital, urgent, onClick }: any) 
       
       <div className="flex gap-3">
         <button 
-          onClick={onClick}
+          onClick={onBook}
           className="flex-1 bg-primary text-white py-4 rounded-2xl font-bold text-xs shadow-md hover:brightness-110 active:scale-95 transition-all"
         >
           Book Appointment
         </button>
-        <button className="px-6 bg-surface-container-high text-primary py-4 rounded-2xl font-bold text-xs hover:bg-surface-container-highest active:scale-95 transition-all">
+        <button 
+          onClick={onDetails}
+          className="px-6 bg-surface-container-high text-primary py-4 rounded-2xl font-bold text-xs hover:bg-surface-container-highest active:scale-95 transition-all"
+        >
           Details
         </button>
       </div>

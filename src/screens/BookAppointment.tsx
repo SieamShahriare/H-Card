@@ -1,62 +1,73 @@
 import React from 'react';
-import { Search, Heart, Shield, Bone, Baby, Stethoscope, User } from 'lucide-react';
+import { Stethoscope, Syringe, ChevronRight, Info } from 'lucide-react';
 import { Screen } from '../types';
 
 export default function BookAppointment({ setScreen }: { setScreen: (s: Screen) => void }) {
   return (
     <div className="space-y-8 pb-8">
-      <section>
-        <h2 className="text-3xl font-extrabold tracking-tight text-primary leading-tight mb-2">What type of doctor do you need?</h2>
-        <p className="text-on-surface-variant text-lg">Select a specialty to begin your booking process.</p>
+      {/* Header Section */}
+      <section className="pt-4">
+        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-3">Book Appointment</h1>
+        <p className="text-slate-500 text-lg leading-snug">
+          Choose the service category you require for your upcoming clinic visit.
+        </p>
       </section>
 
-      <section>
-        <div className="relative group">
-          <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-outline">
-            <Search size={20} />
+      {/* Options Cards */}
+      <div className="space-y-6">
+        {/* General Checkup Card */}
+        <button 
+          onClick={() => setScreen('select-hospital')}
+          className="w-full bg-white rounded-[2rem] p-10 text-left shadow-sm border border-slate-100 hover:shadow-md transition-all group active:scale-[0.99]"
+        >
+          <div className="flex justify-between items-start mb-12">
+            <div className="w-16 h-16 rounded-2xl bg-sky-100/50 flex items-center justify-center text-sky-700">
+              <Stethoscope size={32} />
+            </div>
+            <ChevronRight className="text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" size={24} />
           </div>
-          <input 
-            type="text" 
-            placeholder="Search specialty (e.g. Cardiology)" 
-            className="w-full bg-surface-container-high border-none rounded-3xl py-5 pl-14 pr-6 text-on-surface placeholder:text-outline-variant focus:ring-2 focus:ring-secondary/20 transition-all duration-300 shadow-sm"
-          />
-        </div>
-      </section>
+          <div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-2">General Checkup</h3>
+            <p className="text-slate-500 leading-relaxed max-w-[280px]">
+              Routine physical exams, wellness visits, and specialist consultations.
+            </p>
+          </div>
+        </button>
 
+        {/* Vaccination Card */}
+        <button 
+          onClick={() => setScreen('vaccine-discovery')}
+          className="w-full bg-white rounded-[2rem] p-10 text-left shadow-sm border border-slate-100 hover:shadow-md transition-all group active:scale-[0.99]"
+        >
+          <div className="flex justify-between items-start mb-12">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-100/50 flex items-center justify-center text-emerald-700">
+              <Syringe size={32} />
+            </div>
+            <ChevronRight className="text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" size={24} />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-2">Vaccination</h3>
+            <p className="text-slate-500 leading-relaxed max-w-[280px]">
+              Scheduled immunizations, seasonal flu shots, and booster doses.
+            </p>
+          </div>
+        </button>
+      </div>
+
+      {/* Coming Soon Banner */}
       <section>
-        <div className="flex items-center justify-between mb-6">
-          <span className="text-[11px] font-bold uppercase tracking-widest text-outline">Popular Specialties</span>
-          <span className="h-px flex-1 bg-outline-variant/20 ml-4"></span>
+        <div className="bg-sky-50/50 rounded-3xl p-6 flex items-start gap-5 border border-sky-100/50">
+          <div className="w-12 h-12 rounded-xl bg-slate-200/50 flex items-center justify-center text-slate-600 shrink-0">
+            <Info size={24} />
+          </div>
+          <div>
+            <p className="text-[10px] font-black tracking-widest text-slate-500 uppercase mb-1">Coming Soon</p>
+            <p className="text-sm font-medium text-slate-600 leading-relaxed">
+              Mental Health and Lab Tests will be available for direct booking next month.
+            </p>
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <SpecialtyCard icon={<Heart size={24} />} title="Cardiology" subtitle="Heart & Vascular" color="text-red-500" bg="bg-red-50" onClick={() => setScreen('select-hospital')} />
-          <SpecialtyCard icon={<Shield size={24} />} title="Internal Medicine" subtitle="Adult Care" color="text-primary" bg="bg-emerald-50" onClick={() => setScreen('select-hospital')} />
-          <SpecialtyCard icon={<Bone size={24} />} title="Orthopedics" subtitle="Bones & Joints" color="text-secondary" bg="bg-blue-50" onClick={() => setScreen('select-hospital')} />
-          <SpecialtyCard icon={<Baby size={24} />} title="Pediatrics" subtitle="Child Health" color="text-amber-600" bg="bg-amber-50" onClick={() => setScreen('select-hospital')} />
-          <SpecialtyCard icon={<Stethoscope size={24} />} title="General Physician" subtitle="Primary Care" color="text-on-surface" bg="bg-slate-100" onClick={() => setScreen('select-hospital')} />
-          <SpecialtyCard icon={<User size={24} />} title="Dermatology" subtitle="Skin & Hair" color="text-rose-600" bg="bg-rose-50" onClick={() => setScreen('select-hospital')} />
-        </div>
-      </section>
-
-      <section className="mt-8 overflow-hidden relative rounded-3xl bg-secondary-container p-6 flex flex-col gap-2">
-        <div className="absolute -right-12 -top-12 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
-        <span className="text-[10px] font-extrabold tracking-widest text-on-secondary-container uppercase">Assisted Booking</span>
-        <h3 className="text-xl font-bold text-on-secondary-fixed leading-tight z-10">Unsure about your specialty?</h3>
-        <p className="text-on-secondary-container/80 text-sm mb-4 z-10 leading-relaxed">Speak with our digital triage nurse to find the right care path for your symptoms.</p>
-        <button className="bg-on-secondary-fixed text-white w-fit px-6 py-3 rounded-2xl text-sm font-bold active:scale-95 transition-all">Start Triage</button>
       </section>
     </div>
-  );
-}
-
-function SpecialtyCard({ icon, title, subtitle, color, bg, onClick }: any) {
-  return (
-    <button onClick={onClick} className="flex flex-col items-start p-6 bg-surface-container-lowest rounded-3xl shadow-sm active:scale-[0.98] transition-all duration-200 text-left border border-transparent hover:border-secondary/20">
-      <div className={`w-12 h-12 rounded-2xl ${bg} flex items-center justify-center ${color} mb-4`}>
-        {icon}
-      </div>
-      <span className="text-primary font-bold text-lg tracking-tight">{title}</span>
-      <span className="text-on-surface-variant text-sm mt-1">{subtitle}</span>
-    </button>
   );
 }

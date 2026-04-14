@@ -10,6 +10,7 @@ import {
   Heart
 } from 'lucide-react';
 import { Screen, User } from '../types';
+import { APPOINTMENTS, HOSPITALS } from '../data';
 
 interface HomeProps {
   user: User;
@@ -17,6 +18,10 @@ interface HomeProps {
 }
 
 export default function Home({ user, setScreen }: HomeProps) {
+  // Find the next upcoming appointment (confirmed or pending)
+  const nextAppointment = APPOINTMENTS.find(a => a.status === 'confirmed' || a.status === 'pending');
+  const hospital = nextAppointment ? HOSPITALS.find(h => h.id === nextAppointment.hospitalId) : null;
+
   return (
     <div className="space-y-8">
       {/* Greeting Section */}
@@ -26,7 +31,7 @@ export default function Home({ user, setScreen }: HomeProps) {
             Welcome Back
           </p>
           <h2 className="text-3xl font-extrabold tracking-tight text-primary leading-tight">
-            Good Morning,<br />Shakhwat
+            Good Morning,<br />{user.name.split(' ')[0]}
           </h2>
         </div>
         <div className="w-14 h-14 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-md">
@@ -50,7 +55,7 @@ export default function Home({ user, setScreen }: HomeProps) {
             <div className="space-y-6">
               <div>
                 <p className="text-emerald-200/70 text-[10px] font-bold tracking-[0.2em] uppercase mb-1">
-                  Citizen Record
+                  e-Health-Card
                 </p>
                 <h3 className="text-2xl font-bold leading-none">{user.name}</h3>
               </div>
@@ -115,21 +120,26 @@ export default function Home({ user, setScreen }: HomeProps) {
       </section>
 
       {/* Upcoming Appointment */}
-      <section>
-        <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 shadow-sm flex items-center gap-5">
-          <div className="w-14 h-14 rounded-2xl bg-secondary-container/30 flex items-center justify-center text-secondary shrink-0">
-            <Calendar size={28} />
-          </div>
-          <div className="flex-1">
-            <p className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Next Appointment</p>
-            <p className="text-sm font-bold text-on-surface">General Cardiology Checkup</p>
-            <p className="text-[11px] text-on-surface-variant">Tomorrow, 09:30 AM • BSMMU Hospital</p>
-          </div>
-          <button className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-high transition-colors">
-            <ChevronRight size={20} className="text-outline" />
+      {nextAppointment && (
+        <section>
+          <button 
+            onClick={() => setScreen('past-appointments')}
+            className="w-full bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 shadow-sm flex items-center gap-5 hover:bg-surface-container transition-all active:scale-[0.98] text-left"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-secondary-container/30 flex items-center justify-center text-secondary shrink-0">
+              <Calendar size={28} />
+            </div>
+            <div className="flex-1">
+              <p className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Next Appointment</p>
+              <p className="text-sm font-bold text-on-surface">{nextAppointment.type}</p>
+              <p className="text-[11px] text-on-surface-variant">{nextAppointment.date}, {nextAppointment.time} • {hospital?.name}</p>
+            </div>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center">
+              <ChevronRight size={20} className="text-outline" />
+            </div>
           </button>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

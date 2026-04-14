@@ -1,7 +1,11 @@
 import React from 'react';
 import { Search, MapPin, Plus, Minus, Navigation, Home as HomeIcon, Activity, AlertCircle, ArrowRight } from 'lucide-react';
+import { HOSPITALS } from '../data';
+import { Screen } from '../types';
 
-export default function Hospitals() {
+export default function Hospitals({ setScreen }: { setScreen: (s: Screen, params?: { hospitalId: string }) => void }) {
+  const publicHospitals = HOSPITALS.filter(h => h.type === 'Public');
+
   return (
     <div className="space-y-8 pb-8">
       {/* Search & Editorial Header */}
@@ -63,7 +67,7 @@ export default function Hospitals() {
       <div className="flex justify-between items-end mb-6">
         <div>
           <h3 className="text-2xl font-bold tracking-tight text-on-background">Nearby Facilities</h3>
-          <p className="text-sm text-on-surface-variant font-medium mt-1">Found 12 centers within 5km</p>
+          <p className="text-sm text-on-surface-variant font-medium mt-1">Found {publicHospitals.length} centers within 5km</p>
         </div>
         <button className="text-secondary font-bold flex items-center gap-1 hover:underline text-sm">
           View all <ArrowRight size={16} />
@@ -72,39 +76,25 @@ export default function Hospitals() {
 
       {/* Hospital Cards */}
       <div className="space-y-4">
-        <HospitalCard 
-          icon={<HomeIcon size={24} />}
-          name="Dhaka Medical College Hospital"
-          address="Secretariat Road, Ramna, Dhaka"
-          distance="1.2 km"
-          time="Approx 8 mins"
-          status="Available"
-          statusColor="bg-emerald-100 text-emerald-800"
-        />
-        <HospitalCard 
-          icon={<Activity size={24} />}
-          name="Mugda Medical College Hospital"
-          address="Mugda, Dhaka 1214"
-          distance="2.8 km"
-          time="Approx 15 mins"
-          status="Available"
-          statusColor="bg-emerald-100 text-emerald-800"
-        />
-        <HospitalCard 
-          icon={<AlertCircle size={24} />}
-          name="Sir Salimullah Medical College"
-          address="Mitford, Dhaka 1100"
-          distance="4.1 km"
-          time="Approx 22 mins"
-          status="Limited"
-          statusColor="bg-amber-100 text-amber-800"
-        />
+        {publicHospitals.map(h => (
+          <HospitalCard 
+            key={h.id}
+            icon={<HomeIcon size={24} />}
+            name={h.name}
+            address={h.address}
+            distance={h.distance}
+            time={h.time}
+            status={h.status}
+            statusColor={h.status === 'Available' ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}
+            onSelect={() => setScreen('schedule-appointment', { hospitalId: h.id })}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
-function HospitalCard({ icon, name, address, distance, time, status, statusColor }: any) {
+function HospitalCard({ icon, name, address, distance, time, status, statusColor, onSelect }: any) {
   return (
     <div className="bg-surface-container-lowest p-6 rounded-3xl shadow-sm border border-outline-variant/10 hover:shadow-md transition-all group">
       <div className="flex justify-between items-start mb-4">
@@ -124,7 +114,10 @@ function HospitalCard({ icon, name, address, distance, time, status, statusColor
           <p className="font-bold text-on-background">{distance}</p>
           <p>{time}</p>
         </div>
-        <button className="bg-primary text-white px-6 py-2.5 rounded-2xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all">
+        <button 
+          onClick={onSelect}
+          className="bg-primary text-white px-6 py-2.5 rounded-2xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all"
+        >
           Choose
         </button>
       </div>

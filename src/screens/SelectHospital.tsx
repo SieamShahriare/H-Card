@@ -1,8 +1,11 @@
 import React from 'react';
 import { Search, MapPin, Navigation } from 'lucide-react';
 import { Screen } from '../types';
+import { HOSPITALS } from '../data';
 
-export default function SelectHospital({ setScreen }: { setScreen: (s: Screen) => void }) {
+export default function SelectHospital({ setScreen }: { setScreen: (s: Screen, params?: { vaccineId?: string, hospitalId?: string, doctorId?: string }) => void }) {
+  const privateHospitals = HOSPITALS.filter(h => h.type === 'Private');
+
   return (
     <div className="space-y-6 pb-8">
       <section className="relative h-64 w-full overflow-hidden rounded-3xl shadow-sm">
@@ -18,7 +21,7 @@ export default function SelectHospital({ setScreen }: { setScreen: (s: Screen) =
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold leading-tight tracking-tight text-on-surface mb-4">Hospitals with Cardiology Specialists</h2>
+        <h2 className="text-2xl font-bold leading-tight tracking-tight text-on-surface mb-4">Select Specialist Center</h2>
         <div className="relative flex items-center group mb-6">
           <div className="absolute left-4 text-on-surface-variant">
             <Search size={20} />
@@ -27,9 +30,16 @@ export default function SelectHospital({ setScreen }: { setScreen: (s: Screen) =
         </div>
 
         <div className="space-y-4">
-          <HospitalCard name="Evercare Hospital" location="Bashundhara, Dhaka" distance="2.4 km" tags={['AVAILABLE TODAY', 'JCI ACCREDITED']} onClick={() => setScreen('select-doctor')} />
-          <HospitalCard name="Square Hospital" location="Panthapath, Dhaka" distance="4.1 km" tags={['NEXT SLOT: MON']} onClick={() => setScreen('select-doctor')} />
-          <HospitalCard name="United Hospital" location="Gulshan, Dhaka" distance="5.8 km" tags={['TOP RATED']} onClick={() => setScreen('select-doctor')} />
+          {privateHospitals.map(h => (
+            <HospitalCard 
+              key={h.id}
+              name={h.name} 
+              location={h.address} 
+              distance={h.distance} 
+              tags={h.tags} 
+              onClick={() => setScreen('select-doctor', { hospitalId: h.id })} 
+            />
+          ))}
         </div>
       </section>
     </div>

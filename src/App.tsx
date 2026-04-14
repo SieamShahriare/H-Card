@@ -25,30 +25,20 @@ import SelectDoctor from './screens/SelectDoctor';
 import ScheduleAppointment from './screens/ScheduleAppointment';
 import BookingSuccess from './screens/BookingSuccess';
 import { Screen, User } from './types';
-
-const MOCK_USER: User = {
-  name: "Shakhwat Hossain",
-  id: "BD-1992-0822-01",
-  bloodGroup: "O+",
-  age: "32",
-  nid: "19922695101000088",
-  dob: "12 August 1992",
-  district: "Dhaka",
-  upazila: "Dhanmondi",
-  allergies: ["Penicillin", "Dust"],
-  chronicConditions: ["Hypertension"],
-  emergencyContact: {
-    name: "Ayesha Rahman",
-    relation: "Spouse",
-    phone: "+880 1711-223344"
-  }
-};
+import { MOCK_USER } from './data';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [history, setHistory] = useState<Screen[]>(['home']);
+  const [selectedVaccineId, setSelectedVaccineId] = useState<string | null>(null);
+  const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(null);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
 
-  const navigateTo = (screen: Screen) => {
+  const navigateTo = (screen: Screen, params?: { vaccineId?: string, hospitalId?: string, doctorId?: string }) => {
+    if (params?.vaccineId) setSelectedVaccineId(params.vaccineId);
+    if (params?.hospitalId) setSelectedHospitalId(params.hospitalId);
+    if (params?.doctorId) setSelectedDoctorId(params.doctorId);
+    
     setHistory(prev => [...prev, screen]);
     setCurrentScreen(screen);
   };
@@ -97,7 +87,7 @@ export default function App() {
       case 'vaccines':
         return <Vaccines setScreen={navigateTo} />;
       case 'vaccine-details':
-        return <VaccineDetails />;
+        return <VaccineDetails vaccineId={selectedVaccineId} />;
       case 'prescriptions':
         return <Prescriptions />;
       case 'insurance':
@@ -111,7 +101,7 @@ export default function App() {
       case 'notifications':
         return <Notifications />;
       case 'hospitals':
-        return <Hospitals />;
+        return <Hospitals setScreen={navigateTo} />;
       case 'vaccine-discovery':
         return <VaccineDiscovery setScreen={navigateTo} />;
       case 'book-appointment':
@@ -119,9 +109,16 @@ export default function App() {
       case 'select-hospital':
         return <SelectHospital setScreen={navigateTo} />;
       case 'select-doctor':
-        return <SelectDoctor setScreen={navigateTo} />;
+        return <SelectDoctor setScreen={navigateTo} hospitalId={selectedHospitalId} />;
       case 'schedule-appointment':
-        return <ScheduleAppointment setScreen={navigateTo} />;
+        return (
+          <ScheduleAppointment 
+            setScreen={navigateTo} 
+            hospitalId={selectedHospitalId} 
+            doctorId={selectedDoctorId}
+            vaccineId={selectedVaccineId}
+          />
+        );
       case 'booking-success':
         return <BookingSuccess setScreen={navigateTo} />;
       default:

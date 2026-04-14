@@ -58,6 +58,7 @@ export interface Doctor {
   experience: string;
   availability: string;
   rating: number;
+  image: string;
 }
 
 export interface Appointment {
@@ -90,9 +91,13 @@ export interface Medication {
 export interface VaccineRecord {
   id: string;
   title: string;
+  description: string;
   date?: string;
   dueDate?: string;
   hospitalId: string;
   status: 'Completed' | 'Pending';
   urgent?: boolean;
+  doses: string;
+  effectiveness: string;
+  benefits: string[];
 }

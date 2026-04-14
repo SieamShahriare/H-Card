@@ -1,12 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   ChevronDown, 
   Eye, 
   Download, 
-  Stethoscope
+  Stethoscope,
+  Search
 } from 'lucide-react';
+import { APPOINTMENTS, HOSPITALS, DOCTORS } from '../data';
 
 export default function MedicalHistory() {
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const getHospitalName = (id: string) => HOSPITALS.find(h => h.id === id)?.name || 'Health Center';
+  const getDoctorName = (id: string) => DOCTORS.find(d => d.id === id)?.name || 'Doctor';
+
+  const pastAppointments = APPOINTMENTS.filter(a => {
+    const isCompleted = a.status === 'completed';
+    const hospitalName = getHospitalName(a.hospitalId).toLowerCase();
+    const doctorName = getDoctorName(a.doctorId).toLowerCase();
+    const type = a.type.toLowerCase();
+    const query = searchQuery.toLowerCase();
+    
+    return isCompleted && (
+      hospitalName.includes(query) || 
+      doctorName.includes(query) || 
+      type.includes(query)
+    );
+  });
+
   return (
     <div className="space-y-8">
       {/* Editorial Header */}
@@ -17,63 +38,62 @@ export default function MedicalHistory() {
         </p>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-4 no-scrollbar">
-        <button className="px-6 py-2.5 rounded-full bg-primary text-white font-bold text-sm whitespace-nowrap shadow-md">All</button>
-        <button className="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors whitespace-nowrap text-sm font-semibold">Consultations</button>
-        <button className="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors whitespace-nowrap text-sm font-semibold">Tests</button>
-        <button className="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors whitespace-nowrap text-sm font-semibold">Surgeries</button>
+      {/* Search Bar */}
+      <div className="relative group">
+        <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+          <Search className="text-outline" size={20} />
+        </div>
+        <input 
+          type="text" 
+          placeholder="Search hospital, doctor or diagnosis..." 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full h-14 pl-14 pr-6 rounded-2xl bg-surface-container-high border-none focus:ring-2 focus:ring-primary/20 transition-all text-sm placeholder:text-outline"
+        />
       </div>
 
       {/* Timeline Section */}
-      <div className="relative">
+      <div className="relative pt-4">
         {/* Vertical Line */}
-        <div className="absolute left-[19px] top-4 bottom-0 w-[2px] bg-outline-variant opacity-30"></div>
+        {pastAppointments.length > 0 && (
+          <div className="absolute left-[19px] top-8 bottom-0 w-[2px] bg-outline-variant opacity-30"></div>
+        )}
         
-        {/* Year 2025 */}
-        <div className="mb-10 relative">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="z-10 w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-primary font-bold shadow-sm border-4 border-surface">25</div>
-            <h3 className="text-xl font-bold text-primary tracking-tight">2025</h3>
-          </div>
+        <div className="space-y-12">
+          {pastAppointments.length > 0 ? (
+            pastAppointments.map((app, index) => {
+              const year = app.date.split(' ').pop();
+              const prevYear = index > 0 ? pastAppointments[index-1].date.split(' ').pop() : null;
+              const showYear = year !== prevYear;
 
-          <TimelineItem 
-            hospital="Dhaka Medical College Hospital"
-            date="14 Jan 2025 • General Ward"
-            doctor="Dr. Anisur Rahman"
-            tag="Fever & Cold"
-            tagColor="bg-orange-50 text-orange-700"
-            reportsLabel="Lab Reports & Vitals"
-            dotColor="bg-secondary"
-          />
-        </div>
-
-        {/* Year 2024 */}
-        <div className="mb-10 relative">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="z-10 w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold shadow-sm border-4 border-surface">24</div>
-            <h3 className="text-xl font-bold text-on-surface-variant tracking-tight">2024</h3>
-          </div>
-
-          <TimelineItem 
-            hospital="Kurmitola General Hospital"
-            date="12 Dec 2024 • Endocrine Unit"
-            doctor="Dr. Nafisa Islam"
-            tag="Diabetes"
-            tagColor="bg-red-50 text-red-700"
-            reportsLabel="Prescription History"
-            dotColor="bg-red-500"
-          />
-
-          <TimelineItem 
-            hospital="National Institute of Cardiovascular Diseases"
-            date="05 Aug 2024 • Cardiac OPD"
-            doctor="Prof. Mahmudul Haque"
-            tag="Checkup"
-            tagColor="bg-blue-50 text-blue-700"
-            reportsLabel="ECG Results"
-            dotColor="bg-secondary"
-          />
+              return (
+                <div key={app.id} className="relative">
+                  {showYear && (
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="z-10 w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-primary font-bold shadow-sm border-4 border-surface">
+                        {year?.slice(-2)}
+                      </div>
+                      <h3 className="text-xl font-bold text-primary tracking-tight">{year}</h3>
+                    </div>
+                  )}
+                  
+                  <TimelineItem 
+                    hospital={getHospitalName(app.hospitalId)}
+                    date={app.date}
+                    doctor={getDoctorName(app.doctorId)}
+                    tag={app.type}
+                    tagColor="bg-blue-50 text-blue-700"
+                    reportsLabel="Clinical Records"
+                    dotColor="bg-secondary"
+                  />
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-on-surface-variant italic">No records found matching your search.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

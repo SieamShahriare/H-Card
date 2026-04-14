@@ -9,12 +9,20 @@ import {
   Clock
 } from 'lucide-react';
 import { Screen } from '../types';
+import { APPOINTMENTS, MEDICATIONS, HOSPITALS, DOCTORS } from '../data';
 
 interface RecordsProps {
   setScreen: (screen: Screen) => void;
 }
 
 export default function Records({ setScreen }: RecordsProps) {
+  // Get latest updates
+  const recentAppointment = APPOINTMENTS.find(a => a.status === 'confirmed');
+  const recentMedication = MEDICATIONS[0];
+
+  const getHospitalName = (id: string) => HOSPITALS.find(h => h.id === id)?.name || 'Health Center';
+  const getDoctorName = (id: string) => DOCTORS.find(d => d.id === id)?.name || 'Doctor';
+
   return (
     <div className="space-y-10">
       {/* Hero Section */}
@@ -70,22 +78,26 @@ export default function Records({ setScreen }: RecordsProps) {
         </div>
         
         <div className="space-y-4">
-          <UpdateItem 
-            icon={<FileText size={20} />}
-            title="Lab Report: General Blood Test"
-            source="St. Mary's Diagnostic Center"
-            date="Uploaded Oct 12, 2023"
-            isNew={true}
-            color="bg-primary/10 text-primary"
-          />
-          <UpdateItem 
-            icon={<Pill size={20} />}
-            title="Prescription Renewed"
-            source="Lisinopril 10mg - Dr. Aris Thorne"
-            date="Verified by Health Portal"
-            timeAgo="2d ago"
-            color="bg-secondary/10 text-secondary"
-          />
+          {recentAppointment && (
+            <UpdateItem 
+              icon={<FileText size={20} />}
+              title={`Appointment: ${recentAppointment.type}`}
+              source={getHospitalName(recentAppointment.hospitalId)}
+              date={`Scheduled: ${recentAppointment.date}`}
+              isNew={true}
+              color="bg-primary/10 text-primary"
+            />
+          )}
+          {recentMedication && (
+            <UpdateItem 
+              icon={<Pill size={20} />}
+              title={`New Prescription: ${recentMedication.name}`}
+              source={`${recentMedication.dosage} - ${getDoctorName(recentMedication.doctorId)}`}
+              date="Verified by Health Portal"
+              timeAgo="2d ago"
+              color="bg-secondary/10 text-secondary"
+            />
+          )}
         </div>
       </section>
     </div>

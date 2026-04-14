@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import { Screen } from '../types';
+import { APPOINTMENTS, HOSPITALS, DOCTORS } from '../data';
 
 interface PastAppointmentsProps {
   setScreen: (screen: Screen) => void;
@@ -8,6 +9,12 @@ interface PastAppointmentsProps {
 
 export default function PastAppointments({ setScreen }: PastAppointmentsProps) {
   const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
+
+  const getHospitalName = (id: string) => HOSPITALS.find(h => h.id === id)?.name || 'Health Center';
+  const getDoctor = (id: string) => DOCTORS.find(d => d.id === id);
+
+  const upcomingAppointments = APPOINTMENTS.filter(a => a.status === 'confirmed' || a.status === 'pending');
+  const pastAppointments = APPOINTMENTS.filter(a => a.status === 'completed');
 
   return (
     <div className="space-y-8 pb-8">
@@ -43,70 +50,41 @@ export default function PastAppointments({ setScreen }: PastAppointmentsProps) {
       <div className="space-y-4">
         {tab === 'upcoming' ? (
           <>
-            <AppointmentCard 
-              date="SEP 24, 2023 • 10:30 AM"
-              doctor="Dr. Tahmid Rahman"
-              specialty="Senior Consultant, Cardiology"
-              hospital="Square Hospital, Panthapath, Dhaka"
-              status="CONFIRMED"
-              statusColor="bg-emerald-100 text-emerald-900"
-              isUpcoming={true}
-            />
-            <AppointmentCard 
-              date="OCT 02, 2023 • 04:15 PM"
-              doctor="Dr. Nusrat Jahan"
-              specialty="Internal Medicine"
-              hospital="United Hospital, Gulshan, Dhaka"
-              status="PENDING"
-              statusColor="bg-secondary-container/30 text-secondary"
-              isUpcoming={true}
-            />
-            <AppointmentCard 
-              date="OCT 15, 2023 • 09:00 AM"
-              doctor="Dr. Anisur Rahman"
-              specialty="Orthopedic Surgeon"
-              hospital="Evercare Hospital, Bashundhara, Dhaka"
-              status="CONFIRMED"
-              statusColor="bg-emerald-100 text-emerald-900"
-              isUpcoming={true}
-              opacity="opacity-80"
-            />
+            {upcomingAppointments.map(app => {
+              const doctor = getDoctor(app.doctorId);
+              return (
+                <AppointmentCard 
+                  key={app.id}
+                  date={`${app.date} • ${app.time}`}
+                  doctor={doctor?.name || 'Doctor'}
+                  specialty={doctor?.specialty || 'Specialist'}
+                  hospital={getHospitalName(app.hospitalId)}
+                  status={app.status.toUpperCase()}
+                  statusColor={app.status === 'confirmed' ? 'bg-emerald-100 text-emerald-900' : 'bg-secondary-container/30 text-secondary'}
+                  isUpcoming={true}
+                />
+              );
+            })}
           </>
         ) : (
           <>
-            <AppointmentCard 
-              date="AUG 12, 2023 • 11:00 AM"
-              doctor="Dr. Tahmid Rahman"
-              specialty="Senior Consultant, Cardiology"
-              hospital="Square Hospital, Panthapath"
-              status="COMPLETED"
-              statusColor="bg-slate-200 text-slate-700"
-              isUpcoming={false}
-              symptoms="Occasional chest tightness during exercise, mild fatigue."
-              advice="Continue daily walking. Reduced sodium intake. Follow-up ECG in 6 months."
-            />
-            <AppointmentCard 
-              date="JUL 05, 2023 • 03:30 PM"
-              doctor="Dr. Nusrat Jahan"
-              specialty="Internal Medicine"
-              hospital="United Hospital, Gulshan"
-              status="COMPLETED"
-              statusColor="bg-slate-200 text-slate-700"
-              isUpcoming={false}
-              symptoms="Routine health checkup, seasonal allergy symptoms."
-              advice="Blood work came back normal. Recommended antihistamine for allergy relief."
-            />
-            <AppointmentCard 
-              date="MAY 20, 2023 • 09:15 AM"
-              doctor="Dr. Anisur Rahman"
-              specialty="Orthopedic Surgeon"
-              hospital="Evercare Hospital, Bashundhara"
-              status="COMPLETED"
-              statusColor="bg-slate-200 text-slate-700"
-              isUpcoming={false}
-              symptoms="Ligament strain in right ankle from sports."
-              advice="Rest and ice for 2 weeks. Physical therapy exercises prescribed."
-            />
+            {pastAppointments.map(app => {
+              const doctor = getDoctor(app.doctorId);
+              return (
+                <AppointmentCard 
+                  key={app.id}
+                  date={`${app.date} • ${app.time}`}
+                  doctor={doctor?.name || 'Doctor'}
+                  specialty={doctor?.specialty || 'Specialist'}
+                  hospital={getHospitalName(app.hospitalId)}
+                  status="COMPLETED"
+                  statusColor="bg-slate-200 text-slate-700"
+                  isUpcoming={false}
+                  symptoms={app.symptoms}
+                  advice={app.advice}
+                />
+              );
+            })}
           </>
         )}
       </div>
