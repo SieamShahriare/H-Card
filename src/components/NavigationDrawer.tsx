@@ -14,6 +14,7 @@ import {
   Shield
 } from 'lucide-react';
 import { Screen, User } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 interface NavigationDrawerProps {
   isOpen: boolean;
@@ -24,19 +25,20 @@ interface NavigationDrawerProps {
 }
 
 export default function NavigationDrawer({ isOpen, onClose, user, setScreen, currentScreen }: NavigationDrawerProps) {
+  const { t } = useLanguage();
   const navItems = [
-    { icon: <Home size={24} />, label: 'Home', screen: 'home' as Screen },
-    { icon: <History size={24} />, label: 'Medical History', screen: 'medical-history' as Screen },
-    { icon: <Syringe size={24} />, label: 'Vaccination History', screen: 'vaccines' as Screen },
-    { icon: <Pill size={24} />, label: 'Prescription History', screen: 'prescriptions' as Screen },
-    { icon: <Wallet size={24} />, label: 'Insurance & Subsidies', screen: 'insurance' as Screen },
-    { icon: <Calendar size={24} />, label: 'Appointments', screen: 'appointments' as Screen },
+    { icon: <Home size={24} />, label: t('nav.home'), screen: 'home' as Screen },
+    { icon: <History size={24} />, label: t('nav.history'), screen: 'medical-history' as Screen },
+    { icon: <Syringe size={24} />, label: t('nav.vaccines'), screen: 'vaccines' as Screen },
+    { icon: <Pill size={24} />, label: t('nav.prescriptions'), screen: 'prescriptions' as Screen },
+    { icon: <Wallet size={24} />, label: t('nav.insurance'), screen: 'insurance' as Screen },
+    { icon: <Calendar size={24} />, label: t('nav.appointments'), screen: 'appointments' as Screen },
   ];
 
   const bottomItems = [
-    { icon: <UserIcon size={24} />, label: 'Profile', screen: 'profile' as Screen },
-    { icon: <Settings size={24} />, label: 'Settings', screen: 'profile' as Screen },
-    { icon: <HelpCircle size={24} />, label: 'Help', screen: 'profile' as Screen },
+    { icon: <UserIcon size={24} />, label: t('nav.profile'), screen: 'profile' as Screen },
+    { icon: <Settings size={24} />, label: t('nav.settings'), screen: 'profile' as Screen },
+    { icon: <HelpCircle size={24} />, label: t('nav.help'), screen: 'profile' as Screen },
   ];
 
   return (

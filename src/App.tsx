@@ -26,8 +26,10 @@ import ScheduleAppointment from './screens/ScheduleAppointment';
 import BookingSuccess from './screens/BookingSuccess';
 import { Screen, User } from './types';
 import { MOCK_USER } from './data';
+import { useLanguage } from './context/LanguageContext';
 
 export default function App() {
+  const { t } = useLanguage();
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [history, setHistory] = useState<Screen[]>(['home']);
   const [selectedVaccineId, setSelectedVaccineId] = useState<string | null>(null);
@@ -54,25 +56,25 @@ export default function App() {
 
   const getTitle = () => {
     switch (currentScreen) {
-      case 'home': return 'e-Health Card';
-      case 'records': return 'Medical Records';
-      case 'medical-history': return 'History';
-      case 'vaccines': return 'Immunization';
-      case 'vaccine-details': return 'Vaccine Info';
-      case 'prescriptions': return 'Prescriptions';
-      case 'insurance': return 'Insurance';
-      case 'appointments': return 'Appointments';
-      case 'past-appointments': return 'Your Visits';
-      case 'profile': return 'My Profile';
-      case 'notifications': return 'Notifications';
-      case 'hospitals': return 'Find Centers';
-      case 'vaccine-discovery': return 'Vaccines';
-      case 'book-appointment': return 'Book Appointment';
-      case 'select-hospital': return 'Select Hospital';
-      case 'select-doctor': return 'Select Doctor';
-      case 'schedule-appointment': return 'Schedule Appointment';
-      case 'booking-success': return 'Booking Success';
-      default: return 'Coming Soon';
+      case 'home': return t('nav.home');
+      case 'records': return t('nav.records');
+      case 'medical-history': return t('nav.history');
+      case 'vaccines': return t('nav.vaccines');
+      case 'vaccine-details': return t('nav.vaccineInfo');
+      case 'prescriptions': return t('nav.prescriptions');
+      case 'insurance': return t('nav.insurance');
+      case 'appointments': return t('nav.appointments');
+      case 'past-appointments': return t('nav.visits');
+      case 'profile': return t('nav.profile');
+      case 'notifications': return t('nav.notifications');
+      case 'hospitals': return t('nav.centers');
+      case 'vaccine-discovery': return t('nav.vaccines');
+      case 'book-appointment': return t('nav.book');
+      case 'select-hospital': return t('nav.centers');
+      case 'select-doctor': return t('nav.centers');
+      case 'schedule-appointment': return t('nav.book');
+      case 'booking-success': return t('nav.book');
+      default: return t('common.comingSoon');
     }
   };
 

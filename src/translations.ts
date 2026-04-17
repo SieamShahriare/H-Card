@@ -6,6 +6,7 @@ export const translations = {
       cancel: "Cancel",
       loading: "Loading...",
       error: "An error occurred",
+      comingSoon: "Coming Soon",
     },
     nav: {
       home: "Home",
@@ -21,6 +22,8 @@ export const translations = {
       centers: "Find Centers",
       vaccineInfo: "Vaccine Info",
       book: "Book Appointment",
+      settings: "Settings",
+      help: "Help",
     },
     screens: {
       home: {
@@ -48,6 +51,7 @@ export const translations = {
       cancel: "বাতিল",
       loading: "লোড হচ্ছে...",
       error: "একটি ত্রুটি ঘটেছে",
+      comingSoon: "শীঘ্রই আসছে",
     },
     nav: {
       home: "হোম",
@@ -63,6 +67,8 @@ export const translations = {
       centers: "কেন্দ্র খুঁজুন",
       vaccineInfo: "টিকার তথ্য",
       book: "অ্যাপয়েন্টমেন্ট বুক করুন",
+      settings: "সেটিংস",
+      help: "সহায়তা",
     },
     screens: {
       home: {
