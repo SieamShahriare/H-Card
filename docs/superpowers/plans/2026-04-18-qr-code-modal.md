@@ -15,19 +15,33 @@
 **Files:**
 - Modify: `src/screens/Profile.tsx`
 
-- [ ] **Step 1: Add import for QR code asset**
+- [ ] **Step 1: Add import for QR code asset and X icon**
 
-Add near existing imports:
+Update imports:
 ```tsx
+import { 
+  Settings, 
+  Shield, 
+  Bell, 
+  HelpCircle, 
+  LogOut, 
+  ChevronRight,
+  User as UserIcon,
+  QrCode,
+  Edit3,
+  Globe,
+  X 
+} from 'lucide-react';
 import qrCode from '../assets/qrCode.png';
-import { X } from 'lucide-react'; // Ensure X is imported
 ```
 
 - [ ] **Step 2: Add modal state**
 
-Inside the `Profile` component:
+Update React import and add state:
 ```tsx
-const [showQrModal, setShowQrModal] = React.useState(false);
+import React, { useState } from 'react';
+// ...
+const [showQrModal, setShowQrModal] = useState(false);
 ```
 
 - [ ] **Step 3: Update "My QR Code" button to trigger modal**
@@ -61,11 +75,17 @@ git commit -m "feat: add state and trigger for QR code modal in Profile"
 Insert before the final `</div>` of the `Profile` component:
 ```tsx
 {showQrModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-    <div className="relative bg-surface w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 duration-200">
+  <div 
+    onClick={() => setShowQrModal(false)}
+    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+  >
+    <div 
+      onClick={(e) => e.stopPropagation()}
+      className="relative bg-surface w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 duration-200"
+    >
       {/* Header */}
       <div className="p-4 border-b border-outline-variant flex justify-between items-center bg-surface">
-        <h3 className="font-bold text-on-surface">My Health ID QR</h3>
+        <h3 className="font-bold text-on-surface">{t('screens.profile.qrCode')}</h3>
         <button 
           onClick={() => setShowQrModal(false)}
           className="p-2 hover:bg-surface-container-high rounded-full transition-colors"
@@ -97,24 +117,7 @@ Insert before the final `</div>` of the `Profile` component:
 )}
 ```
 
-- [ ] **Step 2: Add backdrop click to close**
-
-Add `onClick` to the backdrop div (the first `div` of the modal):
-```tsx
-<div 
-  onClick={() => setShowQrModal(false)}
-  className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
->
-  <div 
-    onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
-    className="relative bg-surface w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 duration-200"
-  >
-    {/* ... rest of modal ... */}
-  </div>
-</div>
-```
-
-- [ ] **Step 3: Commit**
+- [ ] **Step 2: Commit**
 
 ```bash
 git add src/screens/Profile.tsx
