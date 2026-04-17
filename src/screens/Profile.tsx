@@ -93,6 +93,48 @@ export default function Profile({ user }: ProfileProps) {
         </button>
         <p className="text-center text-[10px] text-outline font-medium mt-6 uppercase tracking-widest">{t('screens.profile.version')} 2.4.1 ({t('screens.profile.build')} 882)</p>
       </section>
+
+      {showQrModal && (
+        <div 
+          onClick={() => setShowQrModal(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="relative bg-surface w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 duration-200"
+          >
+            {/* Header */}
+            <div className="p-4 border-b border-outline-variant flex justify-between items-center bg-surface">
+              <h3 className="font-bold text-on-surface">{t('screens.profile.qrCode')}</h3>
+              <button 
+                onClick={() => setShowQrModal(false)}
+                className="p-2 hover:bg-surface-container-high rounded-full transition-colors"
+              >
+                <X size={20} className="text-on-surface" />
+              </button>
+            </div>
+
+            {/* QR Code Body */}
+            <div className="p-8 bg-white flex items-center justify-center">
+              <img 
+                src={qrCode} 
+                alt="Health ID QR Code" 
+                className="w-full aspect-square"
+              />
+            </div>
+
+            {/* Footer */}
+            <div className="p-4 border-t border-outline-variant bg-surface">
+              <button 
+                onClick={() => setShowQrModal(false)}
+                className="w-full py-4 bg-primary text-on-primary rounded-2xl font-bold text-sm hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+              >
+                {t('screens.medicalHistory.close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
