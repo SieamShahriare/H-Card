@@ -8,15 +8,19 @@ import {
   ChevronRight,
   User as UserIcon,
   QrCode,
-  Edit3
+  Edit3,
+  Globe
 } from 'lucide-react';
 import { User } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 interface ProfileProps {
   user: User;
 }
 
 export default function Profile({ user }: ProfileProps) {
+  const { locale, toggleLanguage, t } = useLanguage();
+
   return (
     <div className="space-y-10 pb-8">
       {/* Profile Header */}
@@ -62,6 +66,12 @@ export default function Profile({ user }: ProfileProps) {
       <section className="space-y-2">
         <h3 className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.15em] mb-4 px-2">Account Settings</h3>
         <div className="bg-surface-container-low rounded-[2rem] overflow-hidden border border-outline-variant/10">
+          <SettingItem 
+            icon={<Globe size={20} />} 
+            label={t('profile.language')} 
+            value={locale === 'en' ? 'English' : 'বাংলা'}
+            onClick={toggleLanguage}
+          />
           <SettingItem icon={<UserIcon size={20} />} label="Personal Information" />
           <SettingItem icon={<Shield size={20} />} label="Security & Privacy" />
           <SettingItem icon={<Bell size={20} />} label="Notifications" />
@@ -81,16 +91,19 @@ export default function Profile({ user }: ProfileProps) {
   );
 }
 
-function SettingItem({ icon, label }: { icon: React.ReactNode, label: string }) {
+function SettingItem({ icon, label, value, onClick }: { icon: React.ReactNode, label: string, value?: string, onClick?: () => void }) {
   return (
-    <button className="w-full px-6 py-5 flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+    <button className="w-full px-6 py-5 flex items-center justify-between hover:bg-surface-container-high transition-colors group text-left" onClick={onClick}>
       <div className="flex items-center gap-4">
         <div className="text-outline group-hover:text-primary transition-colors">
           {icon}
         </div>
         <span className="text-sm font-bold text-on-surface">{label}</span>
       </div>
-      <ChevronRight size={18} className="text-outline group-hover:text-primary transition-colors" />
+      <div className="flex items-center gap-2">
+        {value && <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">{value}</span>}
+        <ChevronRight size={18} className="text-outline group-hover:text-primary transition-colors" />
+      </div>
     </button>
   );
 }
