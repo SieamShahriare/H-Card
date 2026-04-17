@@ -74,7 +74,7 @@ export default function Profile({ user }: ProfileProps) {
         <div className="bg-surface-container-low rounded-[2rem] overflow-hidden border border-outline-variant/10">
           <SettingItem 
             icon={<Globe size={20} />} 
-            label={t('profile.language')} 
+            label={t('screens.profile.language')} 
             value={locale === 'en' ? t('screens.profile.english') : t('screens.profile.bangla')}
             onClick={toggleLanguage}
           />
@@ -105,15 +105,15 @@ export default function Profile({ user }: ProfileProps) {
           >
             {/* Header */}
             <div className="p-4 border-b border-outline-variant flex justify-between items-center bg-surface">
-              <h3 className="font-bold text-on-surface">{t('screens.profile.qrCode')}</h3>
+              <h3 className="font-bold text-on-surface">My Health ID QR</h3>
               <button 
                 onClick={() => setShowQrModal(false)}
                 className="p-2 hover:bg-surface-container-high rounded-full transition-colors"
+                aria-label="Close QR Modal"
               >
                 <X size={20} className="text-on-surface" />
               </button>
             </div>
-
             {/* QR Code Body */}
             <div className="p-8 bg-white flex items-center justify-center">
               <img 
