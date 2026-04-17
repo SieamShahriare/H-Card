@@ -1,14 +1,16 @@
 import React from 'react';
 import { PlusCircle, Calendar as CalendarIcon, ArrowRight } from 'lucide-react';
 import { Screen } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Appointments({ setScreen }: { setScreen: (s: Screen) => void }) {
+  const { t } = useLanguage();
   return (
     <div className="space-y-8 pb-8">
       <div className="text-center mb-10">
-        <h2 className="text-4xl font-extrabold text-primary tracking-tight mb-4">Appointments</h2>
+        <h2 className="text-4xl font-extrabold text-primary tracking-tight mb-4">{t('nav.appointments')}</h2>
         <p className="text-on-surface-variant text-lg max-w-xl mx-auto">
-          Manage your healthcare journey with ease. Choose an action below to get started with your medical consultations.
+          {t('screens.appointments.subtitle')}
         </p>
       </div>
 
@@ -23,12 +25,12 @@ export default function Appointments({ setScreen }: { setScreen: (s: Screen) => 
             <div className="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
               <PlusCircle size={32} />
             </div>
-            <h3 className="text-2xl font-bold text-primary mb-3">Book New Appointment</h3>
+            <h3 className="text-2xl font-bold text-primary mb-3">{t('screens.appointments.bookTitle')}</h3>
             <p className="text-on-surface-variant leading-relaxed mb-8">
-              Schedule a consultation with your preferred specialist or general practitioner in just a few steps.
+              {t('screens.appointments.bookDesc')}
             </p>
             <div className="flex items-center text-primary font-bold group-hover:translate-x-2 transition-transform">
-              Get Started <ArrowRight className="ml-2" size={20} />
+              {t('screens.appointments.getStarted')} <ArrowRight className="ml-2" size={20} />
             </div>
           </div>
         </button>
@@ -42,12 +44,12 @@ export default function Appointments({ setScreen }: { setScreen: (s: Screen) => 
             <div className="w-16 h-16 bg-secondary text-white rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-secondary/20">
               <CalendarIcon size={32} />
             </div>
-            <h3 className="text-2xl font-bold text-on-background mb-3">View Past & Pending Appointments</h3>
+            <h3 className="text-2xl font-bold text-on-background mb-3">{t('screens.appointments.viewTitle')}</h3>
             <p className="text-on-surface-variant leading-relaxed mb-8">
-              Track your upcoming visits, view history, and manage existing bookings and follow-ups.
+              {t('screens.appointments.viewDesc')}
             </p>
             <div className="flex items-center text-secondary font-bold group-hover:translate-x-2 transition-transform">
-              Open Dashboard <ArrowRight className="ml-2" size={20} />
+              {t('screens.appointments.openDashboard')} <ArrowRight className="ml-2" size={20} />
             </div>
           </div>
         </button>

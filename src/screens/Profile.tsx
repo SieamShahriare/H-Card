@@ -38,14 +38,14 @@ export default function Profile({ user }: ProfileProps) {
           </button>
         </div>
         <h2 className="text-3xl font-extrabold text-on-background tracking-tighter">{user.name}</h2>
-        <p className="text-on-surface-variant font-medium mt-1">Health ID: {user.id}</p>
+        <p className="text-on-surface-variant font-medium mt-1">{t('screens.home.healthId')}: {user.id}</p>
         
         <div className="flex gap-3 mt-6">
           <button className="px-6 py-2.5 bg-primary text-white rounded-full font-bold text-xs flex items-center gap-2 shadow-md active:scale-95 transition-transform">
-            <QrCode size={16} /> My QR Code
+            <QrCode size={16} /> {t('screens.profile.qrCode')}
           </button>
           <button className="px-6 py-2.5 bg-surface-container-high text-primary rounded-full font-bold text-xs active:scale-95 transition-transform">
-            Edit Profile
+            {t('screens.profile.editProfile')}
           </button>
         </div>
       </header>
@@ -53,39 +53,39 @@ export default function Profile({ user }: ProfileProps) {
       {/* Info Cards Bento */}
       <section className="grid grid-cols-2 gap-4">
         <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 shadow-sm">
-          <p className="text-[9px] font-bold text-outline uppercase tracking-widest mb-1">Blood Group</p>
+          <p className="text-[9px] font-bold text-outline uppercase tracking-widest mb-1">{t('screens.profile.bloodGroup')}</p>
           <p className="text-2xl font-extrabold text-primary">{user.bloodGroup}</p>
         </div>
         <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 shadow-sm">
-          <p className="text-[9px] font-bold text-outline uppercase tracking-widest mb-1">Age</p>
-          <p className="text-2xl font-extrabold text-primary">{user.age} Yrs</p>
+          <p className="text-[9px] font-bold text-outline uppercase tracking-widest mb-1">{t('screens.profile.age')}</p>
+          <p className="text-2xl font-extrabold text-primary">{user.age} {t('screens.profile.years')}</p>
         </div>
       </section>
 
       {/* Settings List */}
       <section className="space-y-2">
-        <h3 className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.15em] mb-4 px-2">Account Settings</h3>
+        <h3 className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.15em] mb-4 px-2">{t('screens.profile.accountSettings')}</h3>
         <div className="bg-surface-container-low rounded-[2rem] overflow-hidden border border-outline-variant/10">
           <SettingItem 
             icon={<Globe size={20} />} 
             label={t('profile.language')} 
-            value={locale === 'en' ? 'English' : 'বাংলা'}
+            value={locale === 'en' ? t('screens.profile.english') : t('screens.profile.bangla')}
             onClick={toggleLanguage}
           />
-          <SettingItem icon={<UserIcon size={20} />} label="Personal Information" />
-          <SettingItem icon={<Shield size={20} />} label="Security & Privacy" />
-          <SettingItem icon={<Bell size={20} />} label="Notifications" />
-          <SettingItem icon={<Settings size={20} />} label="App Preferences" />
-          <SettingItem icon={<HelpCircle size={20} />} label="Help & Support" />
+          <SettingItem icon={<UserIcon size={20} />} label={t('screens.profile.personalInfo')} />
+          <SettingItem icon={<Shield size={20} />} label={t('screens.profile.security')} />
+          <SettingItem icon={<Bell size={20} />} label={t('screens.profile.notifications')} />
+          <SettingItem icon={<Settings size={20} />} label={t('screens.profile.preferences')} />
+          <SettingItem icon={<HelpCircle size={20} />} label={t('screens.profile.help')} />
         </div>
       </section>
 
       {/* Logout */}
       <section className="px-2">
         <button className="w-full py-5 flex items-center justify-center gap-3 text-red-600 font-bold text-base hover:bg-red-50 rounded-2xl transition-colors active:scale-95">
-          <LogOut size={22} /> Log Out
+          <LogOut size={22} /> {t('screens.profile.logout')}
         </button>
-        <p className="text-center text-[10px] text-outline font-medium mt-6 uppercase tracking-widest">Version 2.4.1 (Build 882)</p>
+        <p className="text-center text-[10px] text-outline font-medium mt-6 uppercase tracking-widest">{t('screens.profile.version')} 2.4.1 ({t('screens.profile.build')} 882)</p>
       </section>
     </div>
   );

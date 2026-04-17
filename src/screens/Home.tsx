@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Screen, User } from '../types';
 import { APPOINTMENTS, HOSPITALS } from '../data';
+import { useLanguage } from '../context/LanguageContext';
 
 interface HomeProps {
   user: User;
@@ -18,6 +19,7 @@ interface HomeProps {
 }
 
 export default function Home({ user, setScreen }: HomeProps) {
+  const { t } = useLanguage();
   // Find the next upcoming appointment (confirmed or pending)
   const nextAppointment = APPOINTMENTS.find(a => a.status === 'confirmed' || a.status === 'pending');
   const hospital = nextAppointment ? HOSPITALS.find(h => h.id === nextAppointment.hospitalId) : null;
@@ -28,10 +30,10 @@ export default function Home({ user, setScreen }: HomeProps) {
       <section className="flex justify-between items-center">
         <div>
           <p className="text-on-surface-variant text-[10px] font-bold tracking-[0.15em] uppercase mb-1">
-            Welcome Back
+            {t('screens.home.welcomeBack')}
           </p>
           <h2 className="text-3xl font-extrabold tracking-tight text-primary leading-tight">
-            Good Morning,<br />{user.name.split(' ')[0]}
+            {t('screens.home.greeting')}<br />{user.name.split(' ')[0]}
           </h2>
         </div>
         <div className="w-14 h-14 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-md">
@@ -62,17 +64,17 @@ export default function Home({ user, setScreen }: HomeProps) {
               
               <div className="space-y-3">
                 <div>
-                  <p className="text-emerald-200/50 text-[9px] uppercase tracking-wider font-semibold">Health ID</p>
+                  <p className="text-emerald-200/50 text-[9px] uppercase tracking-wider font-semibold">{t('screens.home.healthId')}</p>
                   <p className="text-lg font-mono tracking-wider font-medium">{user.id}</p>
                 </div>
                 
                 <div className="flex gap-8">
                   <div>
-                    <p className="text-emerald-200/50 text-[9px] uppercase tracking-wider font-semibold">Blood Group</p>
+                    <p className="text-emerald-200/50 text-[9px] uppercase tracking-wider font-semibold">{t('screens.home.bloodGroup')}</p>
                     <p className="text-base font-bold">{user.bloodGroup}</p>
                   </div>
                   <div>
-                    <p className="text-emerald-200/50 text-[9px] uppercase tracking-wider font-semibold">Age</p>
+                    <p className="text-emerald-200/50 text-[9px] uppercase tracking-wider font-semibold">{t('screens.home.age')}</p>
                     <p className="text-base font-bold">{user.age}</p>
                   </div>
                 </div>
@@ -89,30 +91,30 @@ export default function Home({ user, setScreen }: HomeProps) {
       {/* Quick Access Grid */}
       <section>
         <h4 className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.15em] mb-6 px-1">
-          Vital Services
+          {t('screens.home.vitalServices')}
         </h4>
         <div className="grid grid-cols-2 gap-4">
           <ServiceTile 
             icon={<History size={24} />} 
-            label="Medical History" 
+            label={t('nav.history')} 
             onClick={() => setScreen('medical-history')}
             color="text-primary"
           />
           <ServiceTile 
             icon={<FileText size={24} />} 
-            label="Prescriptions" 
+            label={t('nav.prescriptions')} 
             onClick={() => setScreen('prescriptions')}
             color="text-secondary"
           />
           <ServiceTile 
             icon={<Syringe size={24} />} 
-            label="Vaccines" 
+            label={t('nav.vaccines')} 
             onClick={() => setScreen('vaccines')}
             color="text-emerald-700"
           />
           <ServiceTile 
             icon={<ShieldCheck size={24} />} 
-            label="Subsidies & Insurance" 
+            label={t('nav.insurance')} 
             onClick={() => setScreen('insurance')}
             color="text-tertiary"
           />
@@ -130,7 +132,7 @@ export default function Home({ user, setScreen }: HomeProps) {
               <Calendar size={28} />
             </div>
             <div className="flex-1">
-              <p className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Next Appointment</p>
+              <p className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">{t('screens.home.nextAppointment')}</p>
               <p className="text-sm font-bold text-on-surface">{nextAppointment.type}</p>
               <p className="text-[11px] text-on-surface-variant">{nextAppointment.date}, {nextAppointment.time} • {hospital?.name}</p>
             </div>

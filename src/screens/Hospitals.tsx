@@ -2,8 +2,10 @@ import React from 'react';
 import { Search, MapPin, Plus, Minus, Navigation, Home as HomeIcon, Activity, AlertCircle, ArrowRight } from 'lucide-react';
 import { HOSPITALS } from '../data';
 import { Screen } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Hospitals({ setScreen }: { setScreen: (s: Screen, params?: { hospitalId: string }) => void }) {
+  const { t } = useLanguage();
   const publicHospitals = HOSPITALS.filter(h => h.type === 'Public');
 
   return (
@@ -11,8 +13,8 @@ export default function Hospitals({ setScreen }: { setScreen: (s: Screen, params
       {/* Search & Editorial Header */}
       <section>
         <div className="mb-8">
-          <h2 className="text-4xl font-extrabold tracking-tight text-on-background mb-4">Find your vaccine center</h2>
-          <p className="text-on-surface-variant text-lg leading-relaxed">Select a government-certified facility to schedule your immunization. All listed locations provide real-time availability updates.</p>
+          <h2 className="text-4xl font-extrabold tracking-tight text-on-background mb-4">{t('screens.hospitals.title')}</h2>
+          <p className="text-on-surface-variant text-lg leading-relaxed">{t('screens.hospitals.subtitle')}</p>
         </div>
         
         <div className="relative group">
@@ -21,7 +23,7 @@ export default function Hospitals({ setScreen }: { setScreen: (s: Screen, params
           </div>
           <input 
             type="text" 
-            placeholder="Search by hospital name or area..." 
+            placeholder={t('screens.hospitals.searchPlaceholder')} 
             className="w-full h-16 pl-14 pr-6 rounded-3xl bg-surface-container-high border-none focus:ring-2 focus:ring-secondary/20 transition-all text-sm placeholder:text-outline"
           />
         </div>
@@ -66,11 +68,11 @@ export default function Hospitals({ setScreen }: { setScreen: (s: Screen, params
       {/* Hospital List Header */}
       <div className="flex justify-between items-end mb-6">
         <div>
-          <h3 className="text-2xl font-bold tracking-tight text-on-background">Nearby Facilities</h3>
-          <p className="text-sm text-on-surface-variant font-medium mt-1">Found {publicHospitals.length} centers within 5km</p>
+          <h3 className="text-2xl font-bold tracking-tight text-on-background">{t('screens.hospitals.nearbyTitle')}</h3>
+          <p className="text-sm text-on-surface-variant font-medium mt-1">{t('screens.hospitals.nearbySubtitle').replace('{count}', publicHospitals.length.toString())}</p>
         </div>
         <button className="text-secondary font-bold flex items-center gap-1 hover:underline text-sm">
-          View all <ArrowRight size={16} />
+          {t('common.viewAll')} <ArrowRight size={16} />
         </button>
       </div>
 
@@ -87,6 +89,7 @@ export default function Hospitals({ setScreen }: { setScreen: (s: Screen, params
             status={h.status}
             statusColor={h.status === 'Available' ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}
             onSelect={() => setScreen('schedule-appointment', { hospitalId: h.id })}
+            chooseLabel={t('common.choose')}
           />
         ))}
       </div>
@@ -94,7 +97,7 @@ export default function Hospitals({ setScreen }: { setScreen: (s: Screen, params
   );
 }
 
-function HospitalCard({ icon, name, address, distance, time, status, statusColor, onSelect }: any) {
+function HospitalCard({ icon, name, address, distance, time, status, statusColor, onSelect, chooseLabel }: any) {
   return (
     <div className="bg-surface-container-lowest p-6 rounded-3xl shadow-sm border border-outline-variant/10 hover:shadow-md transition-all group">
       <div className="flex justify-between items-start mb-4">
@@ -118,7 +121,7 @@ function HospitalCard({ icon, name, address, distance, time, status, statusColor
           onClick={onSelect}
           className="bg-primary text-white px-6 py-2.5 rounded-2xl font-bold text-sm hover:opacity-90 active:scale-95 transition-all"
         >
-          Choose
+          {chooseLabel}
         </button>
       </div>
     </div>
