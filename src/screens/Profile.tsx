@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Settings, 
   Shield, 
@@ -9,8 +9,10 @@ import {
   User as UserIcon,
   QrCode,
   Edit3,
-  Globe
+  Globe,
+  X 
 } from 'lucide-react';
+import qrCode from '../assets/qrCode.png';
 import { User } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -20,6 +22,7 @@ interface ProfileProps {
 
 export default function Profile({ user }: ProfileProps) {
   const { locale, toggleLanguage, t } = useLanguage();
+  const [showQrModal, setShowQrModal] = useState(false);
 
   return (
     <div className="space-y-10 pb-8">
@@ -41,7 +44,10 @@ export default function Profile({ user }: ProfileProps) {
         <p className="text-on-surface-variant font-medium mt-1">{t('screens.home.healthId')}: {user.id}</p>
         
         <div className="flex gap-3 mt-6">
-          <button className="px-6 py-2.5 bg-primary text-white rounded-full font-bold text-xs flex items-center gap-2 shadow-md active:scale-95 transition-transform">
+          <button 
+            onClick={() => setShowQrModal(true)}
+            className="px-6 py-2.5 bg-primary text-white rounded-full font-bold text-xs flex items-center gap-2 shadow-md active:scale-95 transition-transform"
+          >
             <QrCode size={16} /> {t('screens.profile.qrCode')}
           </button>
           <button className="px-6 py-2.5 bg-surface-container-high text-primary rounded-full font-bold text-xs active:scale-95 transition-transform">
