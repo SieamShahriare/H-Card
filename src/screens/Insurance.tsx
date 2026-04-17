@@ -8,19 +8,21 @@ import {
   FileText,
   BadgeCheck
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Insurance() {
+  const { t } = useLanguage();
   return (
     <div className="space-y-10 pb-8">
       {/* Editorial Header */}
       <header>
         <div className="flex items-center gap-2 mb-2">
           <BadgeCheck size={16} className="text-primary" />
-          <span className="uppercase tracking-widest text-primary font-bold text-[9px]">Verified Coverage</span>
+          <span className="uppercase tracking-widest text-primary font-bold text-[9px]">{t('screens.insurance.verifiedCoverage')}</span>
         </div>
-        <h2 className="text-4xl font-extrabold text-on-background tracking-tighter mb-4">Insurance & Subsidies</h2>
+        <h2 className="text-4xl font-extrabold text-on-background tracking-tighter mb-4">{t('screens.insurance.title')}</h2>
         <p className="text-on-surface-variant text-base leading-relaxed">
-          Your digital wallet for healthcare financial support, government subsidies, and private insurance policies.
+          {t('screens.insurance.subtitle')}
         </p>
       </header>
 
@@ -85,7 +87,7 @@ export default function Insurance() {
 
       {/* List of Policies */}
       <section>
-        <h3 className="text-xl font-bold text-on-background tracking-tight mb-6 px-2">Other Active Policies</h3>
+        <h3 className="text-xl font-bold text-on-background tracking-tight mb-6 px-2">{t('screens.insurance.otherPolicies')}</h3>
         <div className="space-y-4">
           <PolicyItem 
             name="LifePlus Private Insurance"

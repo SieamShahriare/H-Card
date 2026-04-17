@@ -10,12 +10,14 @@ import {
 } from 'lucide-react';
 import { Screen } from '../types';
 import { VACCINES, HOSPITALS } from '../data';
+import { useLanguage } from '../context/LanguageContext';
 
 interface VaccinesProps {
   setScreen: (screen: Screen, params?: { vaccineId?: string }) => void;
 }
 
 export default function Vaccines({ setScreen }: VaccinesProps) {
+  const { t } = useLanguage();
   const [tab, setTab] = useState<'past' | 'pending'>('past');
 
   const getHospitalName = (id: string) => HOSPITALS.find(h => h.id === id)?.name || 'Vaccine Center';
@@ -27,9 +29,9 @@ export default function Vaccines({ setScreen }: VaccinesProps) {
     <div className="space-y-8">
       {/* Title & Header */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-extrabold tracking-tight text-primary leading-tight">Vaccine History</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-primary leading-tight">{t('screens.vaccines.title')}</h1>
         <p className="text-on-surface-variant font-medium opacity-80 text-sm">
-          Your complete immunization record verified by health authorities.
+          {t('screens.vaccines.subtitle')}
         </p>
       </div>
 
@@ -146,7 +148,7 @@ function PendingVaccineCard({ title, dueDate, hospital, urgent, onBook, onDetail
             <Syringe size={28} />
           </div>
           <div>
-            <span className="text-[9px] font-bold uppercase tracking-widest text-secondary block mb-1">Immunization due</span>
+            <span className="text-[9px] font-bold uppercase tracking-widest text-secondary block mb-1">Vaccination due</span>
             <h3 className="text-xl font-bold text-on-surface leading-tight">{title}</h3>
           </div>
         </div>

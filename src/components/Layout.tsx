@@ -81,13 +81,16 @@ export default function Layout({
               <Bell size={24} />
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
-            <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-emerald-100 ml-2">
+            <button 
+              onClick={() => setScreen('profile')}
+              className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-emerald-100 ml-2 transition-transform active:scale-90"
+            >
               <img 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcUWmwSNfSdYVnRKIKWHs7mPoVbf8Serdlgbt9KZqsaAjq7oKkzvhYdUem6gbDuAiCSNu7Y_0eRVHK6puNiD-b8MJ7Y105bep10XPnCEDYUyNC-1ZyPC4Mb6vKnB8Hbait83wClVJ0SJQHntwM0BpLI-b-Kwy9FDDTxFNUT41FX9KUgi-j_pmGqPTIFKFVqtjspsXAzbdGfY6x4yJFYqUvdEBlTo3f2js2outnfXRTQMW4N4QwzI6DvXF3rNkLT0l5WK-5d8FzQSye" 
+                src={user.image} 
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
-            </div>
+            </button>
           </div>
         </header>
 

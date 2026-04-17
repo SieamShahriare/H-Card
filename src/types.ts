@@ -22,6 +22,7 @@ export type Screen =
 export interface User {
   name: string;
   id: string;
+  image: string;
   bloodGroup: string;
   age: string;
   nid: string;
@@ -40,14 +41,19 @@ export interface User {
 export interface Hospital {
   id: string;
   name: string;
+  name_bn: string;
   address: string;
+  address_bn: string;
   district: string;
   distance: string;
   time: string;
   status: 'Available' | 'Limited' | 'Busy';
+  status_bn: string;
   type: 'Public' | 'Private';
   specialties: string[];
+  specialties_bn: string[];
   tags: string[];
+  tags_bn: string[];
 }
 
 export interface Doctor {
@@ -71,6 +77,7 @@ export interface Appointment {
   status: 'pending' | 'confirmed' | 'completed';
   symptoms?: string;
   advice?: string;
+  reportImage?: string;
 }
 
 export interface Medication {
@@ -91,13 +98,41 @@ export interface Medication {
 export interface VaccineRecord {
   id: string;
   title: string;
+  title_bn: string;
   description: string;
+  description_bn: string;
   date?: string;
   dueDate?: string;
   hospitalId: string;
   status: 'Completed' | 'Pending';
   urgent?: boolean;
   doses: string;
+  doses_bn: string;
   effectiveness: string;
+  effectiveness_bn: string;
   benefits: string[];
+  benefits_bn: string[];
+}
+
+export interface DiscoveryVaccine {
+  id: string;
+  title: string;
+  title_bn: string;
+  description: string;
+  description_bn: string;
+  category: string;
+  category_bn: string;
+  tag?: string;
+  tagColor?: string;
+  metaLabel: string;
+  metaLabel_bn: string;
+  metaValue: string;
+  metaValue_bn: string;
+  metaValueColor?: string;
+  doses: string;
+  doses_bn: string;
+  effectiveness: string;
+  effectiveness_bn: string;
+  benefits: string[];
+  benefits_bn: string[];
 }

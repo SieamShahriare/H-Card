@@ -1,5 +1,5 @@
 {
-  "homepage": "https://sieamshahriare.github.io/H-Card",
+  "homepage": "https://SieamShahriare.github.io/H-Card",
   "name": "react-example",
   "private": true,
   "version": "0.0.0",
@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "vite build",
-    "predeply": "pnpm run build",
-    "deploy": "gh-pages -d build",
+    "predeploy": "pnpm run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"

@@ -6,8 +6,10 @@ import {
   Hospital as HospitalIcon
 } from 'lucide-react';
 import { MEDICATIONS, HOSPITALS, DOCTORS } from '../data';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Prescriptions() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'active' | 'past'>('active');
   
   const activeMeds = MEDICATIONS.filter(m => m.status === 'active');
@@ -21,11 +23,11 @@ export default function Prescriptions() {
       {/* Header Section */}
       <header>
         <div className="flex items-center gap-2 mb-2">
-          <span className="uppercase tracking-widest text-secondary font-bold text-[9px]">Current Journey</span>
+          <span className="uppercase tracking-widest text-secondary font-bold text-[9px]">{t('screens.prescriptions.currentJourney')}</span>
         </div>
-        <h2 className="text-4xl font-extrabold text-on-background tracking-tighter mb-4">Prescriptions</h2>
+        <h2 className="text-4xl font-extrabold text-on-background tracking-tighter mb-4">{t('screens.prescriptions.title')}</h2>
         <p className="text-on-surface-variant text-base leading-relaxed">
-          Manage your ongoing treatments and review your medication history from all connected healthcare providers.
+          {t('screens.prescriptions.subtitle')}
         </p>
       </header>
 
@@ -99,7 +101,7 @@ export default function Prescriptions() {
       <section>
         <div className="bg-primary-container text-on-primary-container rounded-3xl p-8 relative overflow-hidden shadow-lg">
           <div className="relative z-10">
-            <h3 className="text-2xl font-bold mb-4">Medication Safety Tip</h3>
+            <h3 className="text-2xl font-bold mb-4">{t('screens.prescriptions.safetyTipTitle')}</h3>
             <p className="text-emerald-100/80 text-base leading-relaxed mb-6">
               Always complete the full course of your antibiotics as prescribed by your doctor, even if you feel better. Stopping early can lead to antibiotic resistance.
             </p>

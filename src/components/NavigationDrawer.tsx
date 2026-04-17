@@ -63,7 +63,7 @@ export default function NavigationDrawer({ isOpen, onClose, user, setScreen, cur
             <div className="flex flex-col items-start gap-4 mb-8 pt-4">
               <div className="relative group">
                 <img 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcUWmwSNfSdYVnRKIKWHs7mPoVbf8Serdlgbt9KZqsaAjq7oKkzvhYdUem6gbDuAiCSNu7Y_0eRVHK6puNiD-b8MJ7Y105bep10XPnCEDYUyNC-1ZyPC4Mb6vKnB8Hbait83wClVJ0SJQHntwM0BpLI-b-Kwy9FDDTxFNUT41FX9KUgi-j_pmGqPTIFKFVqtjspsXAzbdGfY6x4yJFYqUvdEBlTo3f2js2outnfXRTQMW4N4QwzI6DvXF3rNkLT0l5WK-5d8FzQSye" 
+                  src={user.image} 
                   alt={user.name}
                   className="w-20 h-20 rounded-2xl object-cover shadow-lg border-2 border-white"
                 />

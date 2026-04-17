@@ -38,7 +38,7 @@ export default function VaccineDiscovery({ setScreen }: VaccineDiscoveryProps) {
       <section>
         <div className="mb-6">
           <h2 className="text-4xl font-extrabold tracking-tight text-primary mb-2">Vaccine Discovery</h2>
-          <p className="text-on-surface-variant text-sm">Search and schedule immunization appointments to keep your community and yourself protected.</p>
+          <p className="text-on-surface-variant text-sm">Search and schedule vaccination appointments to keep your community and yourself protected.</p>
         </div>
         
         <div className="relative group">
@@ -104,7 +104,7 @@ export default function VaccineDiscovery({ setScreen }: VaccineDiscoveryProps) {
       <div className="bg-primary-container text-white p-6 rounded-3xl relative overflow-hidden">
         <div className="relative z-10">
           <h4 className="text-xl font-bold mb-2">Can't find what you need?</h4>
-          <p className="text-emerald-100/80 text-xs mb-6 max-w-[80%]">Consult with our healthcare professionals for travel-specific immunizations or specialized medical requirements.</p>
+          <p className="text-emerald-100/80 text-xs mb-6 max-w-[80%]">Consult with our healthcare professionals for travel-specific vaccinations or specialized medical requirements.</p>
           <button className="bg-white text-primary px-6 py-3 rounded-xl font-bold text-xs hover:bg-emerald-50 transition-colors active:scale-95">
             Chat with Support
           </button>

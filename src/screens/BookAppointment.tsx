@@ -48,8 +48,7 @@ export default function BookAppointment({ setScreen }: { setScreen: (s: Screen) 
           <div>
             <h3 className="text-2xl font-bold text-slate-800 mb-2">Vaccination</h3>
             <p className="text-slate-500 leading-relaxed max-w-[280px]">
-              Scheduled immunizations, seasonal flu shots, and booster doses.
-            </p>
+              Scheduled vaccinations, seasonal flu shots, and booster doses.            </p>
           </div>
         </button>
       </div>

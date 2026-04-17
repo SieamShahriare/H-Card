@@ -28,7 +28,7 @@ export default function Profile({ user }: ProfileProps) {
         <div className="relative mb-6">
           <div className="w-32 h-32 rounded-full border-4 border-emerald-100 p-1 shadow-xl">
             <img 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcUWmwSNfSdYVnRKIKWHs7mPoVbf8Serdlgbt9KZqsaAjq7oKkzvhYdUem6gbDuAiCSNu7Y_0eRVHK6puNiD-b8MJ7Y105bep10XPnCEDYUyNC-1ZyPC4Mb6vKnB8Hbait83wClVJ0SJQHntwM0BpLI-b-Kwy9FDDTxFNUT41FX9KUgi-j_pmGqPTIFKFVqtjspsXAzbdGfY6x4yJFYqUvdEBlTo3f2js2outnfXRTQMW4N4QwzI6DvXF3rNkLT0l5WK-5d8FzQSye" 
+              src={user.image} 
               alt="Profile" 
               className="w-full h-full rounded-full object-cover"
             />
